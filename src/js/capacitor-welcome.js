@@ -75,7 +75,7 @@ window.customElements.define(
 
       self.shadowRoot.querySelector('#makeRequest').addEventListener('click', async function (e) {
         try {
-          await fetch(`https://example.com?param=${encodeURIComponent("!'();:@&=+$,/?%#[]")}`);
+          await fetch(`https://example.com?param=${encodeURIComponent(";:@&=+$,/?%#[]")}`);
         } catch (error) {
           console.error('Error:', error);
         }
