@@ -74,8 +74,23 @@ window.customElements.define(
       const self = this;
 
       self.shadowRoot.querySelector('#makeRequest').addEventListener('click', async function (e) {
+        const carzyUrl = `https://example.com/${encodeURIComponent(';')}/${encodeURIComponent('%')}?param=${encodeURIComponent(
+          ';:@&=+$,/?%#[]'
+        )}#${encodeURIComponent(':')}`;
+
+        // Does not resolve due to non existing port but shows that it generally works:
+        const carzyUrlWithPort = `https://example.com:8080/${encodeURIComponent(';')}/${encodeURIComponent('%')}?param=${encodeURIComponent(
+          ';:@&=+$,/?%#[]'
+        )}#${encodeURIComponent(':')}`;
+
         try {
-          await fetch(`https://example.com?param=${encodeURIComponent(";:@&=+$,/?%#[]")}`);
+          await fetch(carzyUrl);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+
+        try {
+          await fetch(carzyUrlWithPort);
         } catch (error) {
           console.error('Error:', error);
         }
