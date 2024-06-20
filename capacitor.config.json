@@ -1,0 +1,14 @@
+{
+  "appId": "com.capacitortestsmicha.app",
+  "appName": "capacitor-tests",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
