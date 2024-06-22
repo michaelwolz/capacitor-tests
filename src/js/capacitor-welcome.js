@@ -1,14 +1,16 @@
-import { SplashScreen } from '@capacitor/splash-screen';
+import { CameraPreview } from "@capacitor-community/camera-preview";
+import { Camera } from "@capacitor/camera";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 window.customElements.define(
-  'capacitor-welcome',
+  "capacitor-welcome",
   class extends HTMLElement {
     constructor() {
       super();
 
       SplashScreen.hide();
 
-      const root = this.attachShadow({ mode: 'open' });
+      const root = this.attachShadow({ mode: "open" });
 
       root.innerHTML = `
     <style>
@@ -63,7 +65,10 @@ window.customElements.define(
           This demo shows how CapacitorHttp is sending out malformed multipart/form-data requests.
         </p>
         <p>
-          <button class="button" id="makeRequest">Make request</button>
+          <button class="button" id="openCameraPreview">Open Camera</button>
+          <button class="button" id="closeCamera">Close camera</button> 
+          <button class="button" id="takePicture">Take picture</button> 
+          <button class="button" id="small">Open small Cam</button>  
         </p>
       </main>
     </div>
@@ -73,23 +78,53 @@ window.customElements.define(
     connectedCallback() {
       const self = this;
 
-      self.shadowRoot.querySelector('#makeRequest').addEventListener('click', async function (e) {
-        try {
-          await fetch(`https://example.com?param=${encodeURIComponent(";:@&=+$,/?%#[]")}`);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      });
+      self.shadowRoot
+        .querySelector("#openCameraPreview")
+        .addEventListener("click", async function (e) {
+          const permissionStatus = await Camera.checkPermissions();
+
+          if (permissionStatus.camera !== "granted") {
+            await Camera.requestPermissions();
+          }
+
+          const options = {
+            position: "rear",
+            enableZoom: false,
+            toBack: true,
+          };
+
+          await CameraPreview.start(options);
+        });
+
+      self.shadowRoot
+        .querySelector("#closeCamera")
+        .addEventListener("click", async function (e) {
+          await CameraPreview.stop();
+        });
+
+      self.shadowRoot
+        .querySelector("#takePicture")
+        .addEventListener("click", async function (e) {
+          const foo = await CameraPreview.capture();
+          console.log(foo);
+        });
+
+      self.shadowRoot
+        .querySelector("#small")
+        .addEventListener("click", async function (e) {
+          const foo = await CameraPreview.start({ x: 100, y: 100, width: 200, height: 200 });
+          console.log(foo);
+        });
     }
   }
 );
 
 window.customElements.define(
-  'capacitor-welcome-titlebar',
+  "capacitor-welcome-titlebar",
   class extends HTMLElement {
     constructor() {
       super();
-      const root = this.attachShadow({ mode: 'open' });
+      const root = this.attachShadow({ mode: "open" });
       root.innerHTML = `
     <style>
       :host {

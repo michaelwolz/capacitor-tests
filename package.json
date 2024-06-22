@@ -13,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor-community/camera-preview": "file:../camera-preview",
     "@capacitor/android": "^6.1.0",
     "@capacitor/camera": "latest",
     "@capacitor/core": "latest",
