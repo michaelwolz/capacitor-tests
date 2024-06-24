@@ -68,7 +68,7 @@ window.customElements.define(
           <button class="button" id="openCameraPreview">Open Camera</button>
           <button class="button" id="closeCamera">Close camera</button> 
           <button class="button" id="takePicture">Take picture</button> 
-          <button class="button" id="small">Open small Cam</button>  
+          <input id="qual" value="85" />
         </p>
       </main>
     </div>
@@ -91,6 +91,7 @@ window.customElements.define(
             position: "rear",
             enableZoom: false,
             toBack: true,
+            enableHighResolution: true
           };
 
           await CameraPreview.start(options);
@@ -105,15 +106,11 @@ window.customElements.define(
       self.shadowRoot
         .querySelector("#takePicture")
         .addEventListener("click", async function (e) {
-          const foo = await CameraPreview.capture();
-          console.log(foo);
-        });
-
-      self.shadowRoot
-        .querySelector("#small")
-        .addEventListener("click", async function (e) {
-          const foo = await CameraPreview.start({ x: 100, y: 100, width: 200, height: 200 });
-          console.log(foo);
+          const foo = await CameraPreview.capture({
+            quality: parseInt(self.shadowRoot.querySelector("#qual").value),
+          });
+          await CameraPreview.stop();
+          console.log(`data:image/jpeg;base64,${foo.value}`);
         });
     }
   }
